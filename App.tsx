@@ -6,8 +6,9 @@ import Home from "./src/screens/Home";
 function App() {
   const isDark = useColorScheme() === "dark";
   return (
+    
     <SafeAreaProvider>
-      <StatusBar barStyle={isDark ? "light-content" : "dark-content"} />
+      <StatusBar barStyle="light-content" />
       <Home />
     </SafeAreaProvider>
   );
