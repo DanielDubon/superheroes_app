@@ -2,6 +2,7 @@ import React from "react";
 import { View, TextInput, StyleSheet, Text, Pressable } from "react-native";
 import { colors } from "../theme/colors";
 import SearchIcon from '../../assets/search/search.svg';
+import { fonts } from '../theme/typography';
 
 type Props = {
   value: string;
@@ -49,14 +50,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: colors.SearchinputBg,
-    borderRadius: 14,
+    borderRadius: 180,
     borderWidth: 1,
     borderColor: colors.border,
     paddingHorizontal: 12,
     height: 44,
     gap: 8,
+    marginBottom: 20,
   },
   icon: { color: colors.subtext, fontSize: 16 },
-  input: { flex: 1, color: colors.text, paddingVertical: 0, fontSize: 15 },
+  input: { flex: 1, color: colors.text, paddingVertical: 0, fontSize: 15 , fontFamily: fonts.regular},
   clear: { color: colors.subtext, fontSize: 18, paddingHorizontal: 4 },
 });
