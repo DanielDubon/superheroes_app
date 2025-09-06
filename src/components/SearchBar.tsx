@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TextInput, StyleSheet, Text, Pressable } from "react-native";
+import { View, TextInput, StyleSheet, Text, Pressable, Platform } from "react-native";
 import { colors } from "../theme/colors";
 import SearchIcon from '../../assets/search/search.svg';
 import { fonts } from '../theme/typography';
@@ -59,6 +59,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   icon: { color: colors.subtext, fontSize: 16 },
-  input: { flex: 1, color: colors.text, paddingVertical: 0, fontSize: 15 , fontFamily: fonts.regular},
+  input: { flex: 1, color: colors.text, paddingVertical: 0, fontSize: 15 , fontFamily: fonts.regular, paddingTop: 4},
   clear: { color: colors.subtext, fontSize: 18, paddingHorizontal: 4 },
 });

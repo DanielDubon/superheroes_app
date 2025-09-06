@@ -27,7 +27,7 @@ function HeroCard({ hero, fav, onToggle }: Props) {
             style={[styles.favBtn, {backgroundColor: colors.heartplaceholder}]}
             hitSlop={10}
           >
-            {fav ? <FilledHeart width={18} height={18} /> : <Heart width={18} height={18} />}
+            {fav ? <FilledHeart width={22} height={22} /> : <Heart width={22} height={22} />}
           </Pressable>
         </View>
 
@@ -78,11 +78,11 @@ const styles = StyleSheet.create({
 
   favBtn: {
     position: "absolute",
-    right: 8,
-    bottom: 8,
-    width: 34,
-    height: 34,
-    borderRadius: 17,
+    right: 10,
+    bottom: 10,
+    width: 44,
+    height: 44,
+    borderRadius: 100,
     alignItems: "center",
     justifyContent: "center",
   },
