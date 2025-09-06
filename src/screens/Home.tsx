@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView, Text, StyleSheet, View } from "react-native";
 import { getAllHeroes } from "../api/superhero";
 import { colors } from "../theme/colors";
+import SearchBar from "../components/SearchBar";
 
 export default function Home() {
   const [count, setCount] = useState<number | null>(null);
+  const [q, setQ] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -26,6 +28,10 @@ export default function Home() {
         <Text style={styles.hint}>
           {count !== null ? `${count} heroes` : "cargando…"}
         </Text>
+      </View>
+
+      <View style = {{marginTop: 8, marginBottom: 12}}>
+        <SearchBar value={q} onChangeText={setQ} />
       </View>
       
     </SafeAreaView>
