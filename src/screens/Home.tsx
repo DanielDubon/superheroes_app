@@ -11,6 +11,7 @@ import HeroCard from "../components/HeroCard";
 import { fonts } from '../theme/typography';
 import { loadFavs, saveFavs } from '../storage/favs';
 import { H1 } from '../ui/Typography';
+import { heroMatchesQuery } from "../utils/heroSearch";
 
 
 export default function Home() {
@@ -68,13 +69,7 @@ export default function Home() {
 
 
     const filtered = useMemo(() => {
-    const t = q.trim().toLowerCase();
-    if (!t) return data;
-    return data.filter(
-      h =>
-        h.name.toLowerCase().includes(t) ||
-        (h.biography?.fullName ?? "").toLowerCase().includes(t)
-    );
+    return data.filter(h => heroMatchesQuery(h,q));
   }, [q, data]);
 
   return (

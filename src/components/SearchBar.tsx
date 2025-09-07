@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TextInput, StyleSheet, Text, Pressable, Platform } from "react-native";
+import { View, TextInput, StyleSheet, Text, Pressable, Platform, StyleProp, ViewStyle, TextStyle } from "react-native";
 import { colors } from "../theme/colors";
 import SearchIcon from '../../assets/search/search.svg';
 import { fonts } from '../theme/typography';
@@ -9,6 +9,9 @@ type Props = {
   onChangeText: (t: string) => void;
   placeholder?: string;
   onClear?: () => void;
+  containerStyle?: StyleProp<ViewStyle>;
+  inputStyle?: StyleProp<TextStyle>;
+  backgroundColor?: string;
 };
 
 export default function SearchBar({
@@ -16,12 +19,15 @@ export default function SearchBar({
   onChangeText,
   placeholder = "Search",
   onClear,
+  containerStyle,
+  inputStyle,
+  backgroundColor,
 }: Props) {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, backgroundColor && { backgroundColor }, containerStyle]}>
       <SearchIcon width={24} height={24} />
       <TextInput
-        style={styles.input}
+        style={[styles.input, inputStyle]}
         placeholder={placeholder}
         placeholderTextColor={colors.subtext}
         value={value}
