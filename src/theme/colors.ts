@@ -5,5 +5,8 @@ export const colors = {
   SearchinputBg: "#292044",
   border:  "#6a4dbc",
   Herocard: "#291f55",
-  heartplaceholder: "#6a4dbc"
+  heartplaceholder: "#6a4dbc",
+  subbg: "#362c6a",
+  searchSubInputBg: "#4a4179",
+  
 };
