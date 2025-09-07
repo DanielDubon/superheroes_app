@@ -25,7 +25,7 @@ function HeroCard({ hero, fav, onToggle }: Props) {
         <View style={styles.imgWrap}>
           <Image source={{ uri: hero.images.md }} style={styles.img} />
           <Pressable
-            onPress={() => onToggle(hero.id)}
+            onPress={(e) => { e.stopPropagation?.(); onToggle(hero.id); }}
             style={[styles.favBtn, {backgroundColor: colors.heartplaceholder}]}
             hitSlop={10}
           >

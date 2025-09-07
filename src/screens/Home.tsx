@@ -9,7 +9,7 @@ import type { Hero } from "../types/superhero";
 import SearchBar from "../components/SearchBar";
 import HeroCard from "../components/HeroCard";
 import { fonts } from '../theme/typography';
-import { loadFavs, saveFavs } from '../storage/favs';
+import { useFavs } from '../storage/favs';
 import { H1 } from '../ui/Typography';
 import { heroMatchesQuery } from "../utils/heroSearch";
 
@@ -20,23 +20,15 @@ export default function Home() {
   const [q, setQ] = useState("");
   const [data, setData] = useState<Hero[]>([]);
   const [loading, setLoading] = useState(true);
-  const [favs, setFavs] = useState<Set<number>>(new Set());
+  
   const hasQuery = q.trim().length > 0;
   
-  useEffect(() => {
-  setFavs(loadFavs());
-}, []);
 
 
+ const { favs, toggle } = useFavs();
 
-  const toggleFav = useCallback((id: number) => {
-    setFavs(prev => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      saveFavs(next);
-      return next;
-    });
-  }, []);
+
+  
 
  useEffect(() => {
     let alive = true;
@@ -90,7 +82,7 @@ export default function Home() {
         ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
         renderItem={({ item }) => (
           <Pressable onPress={() => nav.navigate('HeroDetail', { hero: item })}>
-          <HeroCard hero={item} fav={favs.has(item.id)} onToggle={toggleFav} />
+          <HeroCard hero={item} fav={favs.has(item.id)} onToggle={toggle} />
           </Pressable>
         )}
         ListEmptyComponent={

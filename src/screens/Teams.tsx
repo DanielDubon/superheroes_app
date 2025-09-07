@@ -20,10 +20,10 @@ import Logo from '../../assets/logo/logo.svg';
 import * as HeroAPI from '../api/superhero';
 
 import HeroCard from '../components/HeroCard';
-import MiniHeroCard from '../components/MiniHeroCard';
-import SearchIcon from '../../assets/search/search.svg';
+import MiniHeroCard from '../components/MiniHeroCard'
 import SearchBar from '../components/SearchBar';
 import { heroMatchesQuery } from '../utils/heroSearch';
+import { useFavs } from '../storage/favs';
 
 
 
@@ -37,6 +37,7 @@ export default function Teams() {
   const [showCreateTeam, setShowCreateTeam] = useState(false);
   const [teamName, setTeamName] = useState('');
   const [loadingHeroes, setLoadingHeroes] = useState(true);
+  const { favs, toggle } = useFavs();
 
   // detalle
   const [selected, setSelected] = useState<Team | null>(null);
@@ -235,7 +236,7 @@ return base.filter(h =>
       onPress={() => nav.navigate('HeroDetail', { hero: item })}
       onLongPress={() => onRemoveMember(index)}
     >
-                <HeroCard hero={item} fav={false} onToggle={() => {}} />
+                <HeroCard hero={item} fav={favs.has(item.id)} onToggle={toggle} />
               </Pressable>
             )}
           />
