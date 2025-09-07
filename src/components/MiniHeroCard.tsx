@@ -75,7 +75,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.subbg,
     borderRadius: 16,
-    padding: 8,
+    padding: 2,
   },
   avatar: {width: 60, height: 80, borderRadius: 12, backgroundColor: '#0002'},
   info: {flex: 1, marginLeft: 12},
