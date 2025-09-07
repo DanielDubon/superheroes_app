@@ -22,6 +22,8 @@ import * as HeroAPI from '../api/superhero';
 import HeroCard from '../components/HeroCard';
 import MiniHeroCard from '../components/MiniHeroCard';
 import SearchIcon from '../../assets/search/search.svg';
+import SearchBar from '../components/SearchBar';
+import { heroMatchesQuery } from '../utils/heroSearch';
 
 
 
@@ -100,11 +102,13 @@ export default function Teams() {
   const candidates = useMemo(() => {
     if (!selected) return [];
     const already = new Set(selected.members.map(String));
-    const text = query.trim().toLowerCase();
-    const base = text
-      ? allHeroes.filter(h => (h?.name || '').toLowerCase().includes(text))
-      : allHeroes;
-    return base.filter(h => !already.has(String(h?.id)) && !already.has(String(h?.name)));
+    const base = query.trim()
+  ? allHeroes.filter(h => heroMatchesQuery(h, query))
+  : allHeroes;
+
+return base.filter(h =>
+  !already.has(String(h?.id)) && !already.has(String(h?.name))
+);
   }, [allHeroes, selected, query]);
 
   // ====== acciones lista
@@ -241,16 +245,13 @@ export default function Teams() {
           <SafeAreaView style={s.pickerPage}>
             <H1>Add member</H1>
 
-            <View style={s.searchBox}>
-             <SearchIcon width={24} height={24} />
-              <TextInput
-                value={query}
-                onChangeText={setQuery}
-                placeholder="Search"
-                placeholderTextColor={colors.subtext}
-                style={s.searchInput}
-                autoFocus
-              />
+           <View style={{ marginTop: 8, marginBottom: 12 }}>
+             <SearchBar
+            value={query}
+            onChangeText={setQuery}
+            placeholder="Search"
+            backgroundColor={colors.searchSubInputBg}
+            inputStyle={{ color: colors.text }}/>
             </View>
 
             <FlatList
