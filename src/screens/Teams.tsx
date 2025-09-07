@@ -4,7 +4,7 @@ import type { RootStackParamList } from '../navigation/RootNavigator';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   SafeAreaView, View, Text, FlatList, Pressable, Modal,
-  TextInput, StyleSheet, Alert, KeyboardAvoidingView, Platform
+  TextInput, StyleSheet, Alert, KeyboardAvoidingView, Platform, ActivityIndicator
 } from 'react-native';
 import {colors} from '../theme/colors';
 import {fonts} from '../theme/typography';
@@ -20,10 +20,10 @@ import Logo from '../../assets/logo/logo.svg';
 import * as HeroAPI from '../api/superhero';
 
 import HeroCard from '../components/HeroCard';
-import MiniHeroCard from '../components/MiniHeroCard';
-import SearchIcon from '../../assets/search/search.svg';
+import MiniHeroCard from '../components/MiniHeroCard'
 import SearchBar from '../components/SearchBar';
 import { heroMatchesQuery } from '../utils/heroSearch';
+import { useFavs } from '../storage/favs';
 
 
 
@@ -36,6 +36,8 @@ export default function Teams() {
   const [teams, setTeams] = useState<Team[]>([]);
   const [showCreateTeam, setShowCreateTeam] = useState(false);
   const [teamName, setTeamName] = useState('');
+  const [loadingHeroes, setLoadingHeroes] = useState(true);
+  const { favs, toggle } = useFavs();
 
   // detalle
   const [selected, setSelected] = useState<Team | null>(null);
@@ -75,6 +77,8 @@ export default function Teams() {
         if (alive) setAllHeroes(list);
       } catch {
         if (alive) setAllHeroes([]);
+      }finally{
+        if (alive) setLoadingHeroes(false);
       }
     })();
     return () => { alive = false; };
@@ -101,15 +105,13 @@ export default function Teams() {
   // candidatos para agregar 
   const candidates = useMemo(() => {
     if (!selected) return [];
-    const already = new Set(selected.members.map(String));
-    const base = query.trim()
-  ? allHeroes.filter(h => heroMatchesQuery(h, query))
-  : allHeroes;
-
-return base.filter(h =>
-  !already.has(String(h?.id)) && !already.has(String(h?.name))
-);
-  }, [allHeroes, selected, query]);
+    return query.trim()
+        ? allHeroes.filter(h => heroMatchesQuery(h, query))
+        : allHeroes;
+    }, [allHeroes, selected, query]);
+    const memberSet = useMemo(
+    () => new Set(selected?.members.map(String) ?? []),
+    [selected] );
 
   // ====== acciones lista
   const openCreate = useCallback(async () => {
@@ -202,6 +204,9 @@ return base.filter(h =>
 
   // ================== RENDER ==================
   if (selected) {
+    
+    const hasQuery = query.trim().length > 0;
+
     return (
       <SafeAreaView style={s.root}>
         {/* Header detalle */}
@@ -229,7 +234,7 @@ return base.filter(h =>
       onPress={() => nav.navigate('HeroDetail', { hero: item })}
       onLongPress={() => onRemoveMember(index)}
     >
-                <HeroCard hero={item} fav={false} onToggle={() => {}} />
+                <HeroCard hero={item} fav={favs.has(item.id)} onToggle={toggle} />
               </Pressable>
             )}
           />
@@ -255,20 +260,46 @@ return base.filter(h =>
             </View>
 
             <FlatList
-              data={candidates}
-              keyExtractor={(h) => String(h?.id ?? h?.name)}
-              contentContainerStyle={{paddingHorizontal: 4, paddingBottom: 20, rowGap: 12}}
-              renderItem={({item}) => (
-                <MiniHeroCard
-                  hero={item}
-                  onPress={() => nav.navigate('HeroDetail', { hero: item })}
-                  onAdd={() => {
-                    addHero(item);
-                    setShowPicker(false);
-                  }}
-                />
-              )}
-            />
+                data={candidates}
+                keyExtractor={(h) => String(h?.id ?? h?.name)}
+                contentContainerStyle={{ paddingHorizontal: 4, paddingBottom: 20, rowGap: 12 }}
+                renderItem={({ item }) => {
+                const key = String(item?.id ?? item?.name);
+                const isMember = memberSet.has(key);
+                return (
+                    <MiniHeroCard
+                    hero={item}
+                    isMember={isMember}
+                    onPress={() => nav.navigate('HeroDetail', { hero: item })}
+                    onAdd={() => { if (!isMember) addHero(item); }}
+                    />
+                );
+                }}
+                
+            ListEmptyComponent={
+            <View style={{ alignItems: 'center', marginTop: 24 }}>
+            {loadingHeroes ? (
+                <>
+                <ActivityIndicator color={colors.subtext} />
+                <Text style={{ color: colors.subtext, marginTop: 8 }}>Cargando…</Text>
+                </>
+            ) : hasQuery ? (
+                <>
+                <Text style={{ color: colors.text, fontFamily: fonts.semiBold, fontSize: 18 }}>
+                    No results found
+                </Text>
+                <Text style={{ color: colors.subtext, marginTop: 6 }}>
+                    Try searching by another name
+                </Text>
+                </>
+            ) : (
+                <Text style={{ color: colors.subtext }}>
+                No candidates to add
+                </Text>
+            )}
+            </View>
+        }
+        />
           </SafeAreaView>
         </Modal>
       </SafeAreaView>

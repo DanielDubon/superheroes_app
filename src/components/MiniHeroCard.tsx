@@ -3,6 +3,7 @@ import {View, Text, Image, Pressable, StyleSheet} from 'react-native';
 import {colors} from '../theme/colors';
 import {fonts} from '../theme/typography';
 import Fist from '../../assets/fist/fist.svg';
+import { getAvgScore } from "../utils/heroStats";
 
 type Props = {
   hero: any;
@@ -10,31 +11,21 @@ type Props = {
   onPress?: () => void;
   right?: React.ReactNode;
   disabled?: boolean;
+  isMember?: boolean;
 };
 
-function toNumberOrNull(v: any): number | null {
-  if (v === null || v === undefined) return null;
-  const s = String(v).trim().toLowerCase();
-  if (s === '' || s === 'null' || s === 'unknown' || s === 'n/a') return null;
-  const n = Number(s);
-  return isNaN(n) ? null : n;
-}
 
-export default function MiniHeroCard({hero, onAdd, onPress, right, disabled}: Props) {
-  
+
+export default function MiniHeroCard({hero, onAdd, onPress, right, disabled, isMember}: Props) {
+  const avg = getAvgScore(hero);
   const avatar =
     hero?.images?.sm || hero?.images?.md || hero?.images?.lg ||
     hero?.image || hero?.thumbnail || undefined;
 
   
-  const power =
-    toNumberOrNull(hero?.powerstats?.power) ??
-    toNumberOrNull(hero?.power) ??
-    null;
 
   return (
     <Pressable style={s.card} onPress={onPress}>
-    <View style={s.card}>
       <Image source={{uri: avatar}} style={s.avatar} />
       <View style={s.info}>
         <Text style={s.name} numberOfLines={1}>{hero?.name}</Text>
@@ -43,28 +34,31 @@ export default function MiniHeroCard({hero, onAdd, onPress, right, disabled}: Pr
           <Text style={s.sub} numberOfLines={1}>{hero.biography.fullName}</Text>
         )}
 
-        {power !== null && (
-          <View style={s.statRow}>
-            <Fist width={16} height={16} />
-            <Text style={s.meta}>
-              {' '}{power} <Text style={s.metaDim}>/ 100</Text>
-            </Text>
-          </View>
-        )}
-      </View>
+        <View style={s.statRow}>
+         <Fist width={16} height={16} />
+         <Text style={s.meta}>
+         {avg ?? "-"} <Text style={s.metaDim}>/ 100</Text>
+         </Text>
+       </View>
+       </View>
 
-      {right ? (
+       {right ? (
         right
+      ) : isMember ? (
+        <View style={s.addBtn }>
+          <Fist width={20} height={20} />
+        </View>
       ) : (
         <Pressable
-          style={[s.addBtn, disabled && {opacity: 0.5}]}
-          onPress={onAdd}
-          disabled={disabled}
+          style={s.addBtn}
+          onPress={(e) => { e.stopPropagation?.(); onAdd?.(); }}
+          hitSlop={10}
         >
           <Text style={s.plus}>+</Text>
         </Pressable>
       )}
-    </View>
+
+    
     </Pressable>
   );
 }

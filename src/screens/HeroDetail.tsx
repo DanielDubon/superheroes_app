@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, {  useState } from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,10 @@ import { fonts } from '../theme/typography';
 import Fist from '../../assets/fist/fist.svg';
 import Heart from '../../assets/medium-heart/medium-heart.svg';
 import FilledHeart from '../../assets/medium-filled-heart/medium-filled-heart.svg';
+import { getAvgScore } from '../utils/heroStats';
+import { useFavs } from '../storage/favs';
+
+
 
 type Props = NativeStackScreenProps<RootStackParamList, 'HeroDetail'>;
 
@@ -28,11 +32,11 @@ function toNum(v: any): number | null {
 
 export default function HeroDetail({ route, navigation }: Props) {
   const hero = route.params.hero;
-  const [fav, setFav] = useState(false);
-
+  const avg = getAvgScore(hero);
   const banner =
     hero?.images?.lg || hero?.images?.md || hero?.images?.sm || hero?.image || hero?.thumbnail;
-
+  const { favs, toggle } = useFavs();
+  const isFav = favs.has(hero.id);
   
   const H = Dimensions.get('window').height;
   const BANNER_H = Math.round(H * 0.5);
@@ -46,11 +50,7 @@ export default function HeroDetail({ route, navigation }: Props) {
     ['Combat',       toNum(hero?.powerstats?.combat)],
   ];
 
-  const avg = useMemo(() => {
-    const v = stats.map(s => s[1]).filter((n): n is number => n !== null);
-    if (!v.length) return null;
-    return Math.round(v.reduce((a, b) => a + b, 0) / v.length);
-  }, [stats]);
+  
 
   const LABEL_W = 95;
   
@@ -61,8 +61,8 @@ export default function HeroDetail({ route, navigation }: Props) {
         <Pressable style={s.circleBtn} onPress={() => navigation.goBack()}>
           <Text style={s.backArrow}>‹</Text>
         </Pressable>
-        <Pressable style={s.circleBtn} onPress={() => setFav(x => !x)}>
-          {fav ? <FilledHeart width={20} height={20} /> : <Heart width={20} height={20} />}
+        <Pressable style={s.circleBtn} onPress={() => toggle(hero.id)}>
+          {isFav ? <FilledHeart width={20} height={20} /> : <Heart width={20} height={20} /> }
         </Pressable>
       </View>
 
