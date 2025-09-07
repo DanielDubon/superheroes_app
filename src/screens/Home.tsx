@@ -21,6 +21,7 @@ export default function Home() {
   const [data, setData] = useState<Hero[]>([]);
   const [loading, setLoading] = useState(true);
   const [favs, setFavs] = useState<Set<number>>(new Set());
+  const hasQuery = q.trim().length > 0;
   
   useEffect(() => {
   setFavs(loadFavs());
@@ -93,21 +94,28 @@ export default function Home() {
           </Pressable>
         )}
         ListEmptyComponent={
-          <View style={{ alignItems: "center", marginTop: 32 }}>
-            {loading ? (
-              <>
-                <ActivityIndicator color={colors.subtext} />
-                <Text style={{ color: colors.subtext, marginTop: 8 }}>
-                  Cargando…
-                </Text>
-              </>
-            ) : (
-              <Text style={{ color: colors.subtext }}>
-                Sin datos. ¿Hay internet? (cerrar/abrir para reintentar)
+        <View style={{ alignItems: "center", marginTop: 32 }}>
+          {loading ? (
+            <>
+              <ActivityIndicator color={colors.subtext} />
+              <Text style={{ color: colors.subtext, marginTop: 8 }}>Cargando…</Text>
+            </>
+          ) : hasQuery ? (
+            <>
+              <Text style={{ color: colors.text, fontFamily: fonts.semiBold, fontSize: 18 }}>
+                No results found
               </Text>
-            )}
-          </View>
-        }
+              <Text style={{ color: colors.subtext, marginTop: 6 }}>
+                Try searching by another name
+              </Text>
+            </>
+          ) : (
+            <Text style={{ color: colors.subtext }}>
+              Sin datos. ¿Hay internet? (cerrar/abrir para reintentar)
+            </Text>
+          )}
+        </View>
+      }
         extraData={favs}
       />
     </SafeAreaView>

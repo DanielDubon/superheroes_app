@@ -6,6 +6,7 @@ import Heart from "../../assets/medium-heart/medium-heart.svg";
 import FilledHeart from "../../assets/medium-filled-heart/medium-filled-heart.svg";
 import Fist from "../../assets/fist/fist.svg";
 import { fonts } from '../theme/typography';
+import { getAvgScore } from "../utils/heroStats";
 
 type Props = {
   hero: Hero;
@@ -16,6 +17,7 @@ type Props = {
 function HeroCard({ hero, fav, onToggle }: Props) {
 
   const fullName = hero.biography?.fullName || "—";
+  const avg = getAvgScore(hero);
 
  return (
     <View style={styles.card}>
@@ -37,7 +39,7 @@ function HeroCard({ hero, fav, onToggle }: Props) {
           <View style={styles.stats}>
             <Fist width={18} height={18} />
             <Text style={styles.statText}>
-              {hero.powerstats.intelligence} <Text style={styles.outOf}>/ 100</Text>
+              {avg ?? "—"} <Text style={styles.outOf}>/ 100</Text>
             </Text>
           </View>
         </View>

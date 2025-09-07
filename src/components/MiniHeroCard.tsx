@@ -3,6 +3,7 @@ import {View, Text, Image, Pressable, StyleSheet} from 'react-native';
 import {colors} from '../theme/colors';
 import {fonts} from '../theme/typography';
 import Fist from '../../assets/fist/fist.svg';
+import { getAvgScore } from "../utils/heroStats";
 
 type Props = {
   hero: any;
@@ -21,7 +22,7 @@ function toNumberOrNull(v: any): number | null {
 }
 
 export default function MiniHeroCard({hero, onAdd, onPress, right, disabled}: Props) {
-  
+  const avg = getAvgScore(hero);
   const avatar =
     hero?.images?.sm || hero?.images?.md || hero?.images?.lg ||
     hero?.image || hero?.thumbnail || undefined;
@@ -47,7 +48,7 @@ export default function MiniHeroCard({hero, onAdd, onPress, right, disabled}: Pr
           <View style={s.statRow}>
             <Fist width={16} height={16} />
             <Text style={s.meta}>
-              {' '}{power} <Text style={s.metaDim}>/ 100</Text>
+             {avg ?? "-"} <Text style={s.metaDim}>/ 100</Text>
             </Text>
           </View>
         )}

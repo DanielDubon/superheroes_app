@@ -4,7 +4,7 @@ import type { RootStackParamList } from '../navigation/RootNavigator';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   SafeAreaView, View, Text, FlatList, Pressable, Modal,
-  TextInput, StyleSheet, Alert, KeyboardAvoidingView, Platform
+  TextInput, StyleSheet, Alert, KeyboardAvoidingView, Platform, ActivityIndicator
 } from 'react-native';
 import {colors} from '../theme/colors';
 import {fonts} from '../theme/typography';
@@ -36,6 +36,7 @@ export default function Teams() {
   const [teams, setTeams] = useState<Team[]>([]);
   const [showCreateTeam, setShowCreateTeam] = useState(false);
   const [teamName, setTeamName] = useState('');
+  const [loadingHeroes, setLoadingHeroes] = useState(true);
 
   // detalle
   const [selected, setSelected] = useState<Team | null>(null);
@@ -75,6 +76,8 @@ export default function Teams() {
         if (alive) setAllHeroes(list);
       } catch {
         if (alive) setAllHeroes([]);
+      }finally{
+        if (alive) setLoadingHeroes(false);
       }
     })();
     return () => { alive = false; };
@@ -202,6 +205,9 @@ return base.filter(h =>
 
   // ================== RENDER ==================
   if (selected) {
+    
+    const hasQuery = query.trim().length > 0;
+
     return (
       <SafeAreaView style={s.root}>
         {/* Header detalle */}
@@ -255,20 +261,44 @@ return base.filter(h =>
             </View>
 
             <FlatList
-              data={candidates}
-              keyExtractor={(h) => String(h?.id ?? h?.name)}
-              contentContainerStyle={{paddingHorizontal: 4, paddingBottom: 20, rowGap: 12}}
-              renderItem={({item}) => (
+            data={candidates}
+            keyExtractor={(h) => String(h?.id ?? h?.name)}
+            contentContainerStyle={{ paddingHorizontal: 4, paddingBottom: 20, rowGap: 12 }}
+            renderItem={({ item }) => (
                 <MiniHeroCard
-                  hero={item}
-                  onPress={() => nav.navigate('HeroDetail', { hero: item })}
-                  onAdd={() => {
+                hero={item}
+                onPress={() => nav.navigate('HeroDetail', { hero: item })}
+                onAdd={() => {
                     addHero(item);
                     setShowPicker(false);
-                  }}
+                }}
                 />
-              )}
-            />
+            )}
+            
+            ListEmptyComponent={
+            <View style={{ alignItems: 'center', marginTop: 24 }}>
+            {loadingHeroes ? (
+                <>
+                <ActivityIndicator color={colors.subtext} />
+                <Text style={{ color: colors.subtext, marginTop: 8 }}>Cargando…</Text>
+                </>
+            ) : hasQuery ? (
+                <>
+                <Text style={{ color: colors.text, fontFamily: fonts.semiBold, fontSize: 18 }}>
+                    No results found
+                </Text>
+                <Text style={{ color: colors.subtext, marginTop: 6 }}>
+                    Try searching by another name
+                </Text>
+                </>
+            ) : (
+                <Text style={{ color: colors.subtext }}>
+                No candidates to add
+                </Text>
+            )}
+            </View>
+        }
+        />
           </SafeAreaView>
         </Modal>
       </SafeAreaView>
