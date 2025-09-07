@@ -105,15 +105,13 @@ export default function Teams() {
   // candidatos para agregar 
   const candidates = useMemo(() => {
     if (!selected) return [];
-    const already = new Set(selected.members.map(String));
-    const base = query.trim()
-  ? allHeroes.filter(h => heroMatchesQuery(h, query))
-  : allHeroes;
-
-return base.filter(h =>
-  !already.has(String(h?.id)) && !already.has(String(h?.name))
-);
-  }, [allHeroes, selected, query]);
+    return query.trim()
+        ? allHeroes.filter(h => heroMatchesQuery(h, query))
+        : allHeroes;
+    }, [allHeroes, selected, query]);
+    const memberSet = useMemo(
+    () => new Set(selected?.members.map(String) ?? []),
+    [selected] );
 
   // ====== acciones lista
   const openCreate = useCallback(async () => {
@@ -262,20 +260,22 @@ return base.filter(h =>
             </View>
 
             <FlatList
-            data={candidates}
-            keyExtractor={(h) => String(h?.id ?? h?.name)}
-            contentContainerStyle={{ paddingHorizontal: 4, paddingBottom: 20, rowGap: 12 }}
-            renderItem={({ item }) => (
-                <MiniHeroCard
-                hero={item}
-                onPress={() => nav.navigate('HeroDetail', { hero: item })}
-                onAdd={() => {
-                    addHero(item);
-                    setShowPicker(false);
+                data={candidates}
+                keyExtractor={(h) => String(h?.id ?? h?.name)}
+                contentContainerStyle={{ paddingHorizontal: 4, paddingBottom: 20, rowGap: 12 }}
+                renderItem={({ item }) => {
+                const key = String(item?.id ?? item?.name);
+                const isMember = memberSet.has(key);
+                return (
+                    <MiniHeroCard
+                    hero={item}
+                    isMember={isMember}
+                    onPress={() => nav.navigate('HeroDetail', { hero: item })}
+                    onAdd={() => { if (!isMember) addHero(item); }}
+                    />
+                );
                 }}
-                />
-            )}
-            
+                
             ListEmptyComponent={
             <View style={{ alignItems: 'center', marginTop: 24 }}>
             {loadingHeroes ? (
