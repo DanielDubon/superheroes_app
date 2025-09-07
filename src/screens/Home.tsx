@@ -1,5 +1,8 @@
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RootStackParamList } from '../navigation/RootNavigator';
 import React, { useMemo, useEffect, useState, useCallback } from "react";
-import { SafeAreaView, Text, StyleSheet, View, FlatList, ActivityIndicator } from "react-native";
+import { SafeAreaView, Text, StyleSheet, View, FlatList, ActivityIndicator , Pressable} from "react-native";
 import { getAllHeroes } from "../api/superhero";
 import { colors } from "../theme/colors";
 import type { Hero } from "../types/superhero";
@@ -9,7 +12,9 @@ import { fonts } from '../theme/typography';
 import { loadFavs, saveFavs } from '../storage/favs';
 import { H1 } from '../ui/Typography';
 
+
 export default function Home() {
+  const nav = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [count, setCount] = useState<number | null>(null);
   const [q, setQ] = useState("");
   const [data, setData] = useState<Hero[]>([]);
@@ -19,6 +24,8 @@ export default function Home() {
   useEffect(() => {
   setFavs(loadFavs());
 }, []);
+
+
 
   const toggleFav = useCallback((id: number) => {
     setFavs(prev => {
@@ -86,7 +93,9 @@ export default function Home() {
         contentContainerStyle={{ paddingBottom: 24 }}
         ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
         renderItem={({ item }) => (
+          <Pressable onPress={() => nav.navigate('HeroDetail', { hero: item })}>
           <HeroCard hero={item} fav={favs.has(item.id)} onToggle={toggleFav} />
+          </Pressable>
         )}
         ListEmptyComponent={
           <View style={{ alignItems: "center", marginTop: 32 }}>

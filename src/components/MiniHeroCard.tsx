@@ -7,6 +7,7 @@ import Fist from '../../assets/fist/fist.svg';
 type Props = {
   hero: any;
   onAdd?: () => void;
+  onPress?: () => void;
   right?: React.ReactNode;
   disabled?: boolean;
 };
@@ -19,7 +20,7 @@ function toNumberOrNull(v: any): number | null {
   return isNaN(n) ? null : n;
 }
 
-export default function MiniHeroCard({hero, onAdd, right, disabled}: Props) {
+export default function MiniHeroCard({hero, onAdd, onPress, right, disabled}: Props) {
   
   const avatar =
     hero?.images?.sm || hero?.images?.md || hero?.images?.lg ||
@@ -32,6 +33,7 @@ export default function MiniHeroCard({hero, onAdd, right, disabled}: Props) {
     null;
 
   return (
+    <Pressable style={s.card} onPress={onPress}>
     <View style={s.card}>
       <Image source={{uri: avatar}} style={s.avatar} />
       <View style={s.info}>
@@ -63,6 +65,7 @@ export default function MiniHeroCard({hero, onAdd, right, disabled}: Props) {
         </Pressable>
       )}
     </View>
+    </Pressable>
   );
 }
 

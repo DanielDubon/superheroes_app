@@ -1,3 +1,6 @@
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RootStackParamList } from '../navigation/RootNavigator';
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   SafeAreaView, View, Text, FlatList, Pressable, Modal,
@@ -20,9 +23,13 @@ import HeroCard from '../components/HeroCard';
 import MiniHeroCard from '../components/MiniHeroCard';
 import SearchIcon from '../../assets/search/search.svg';
 
+
 type Hero = any;
 
+
+
 export default function Teams() {
+  const nav = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [teams, setTeams] = useState<Team[]>([]);
   const [showCreateTeam, setShowCreateTeam] = useState(false);
   const [teamName, setTeamName] = useState('');
@@ -213,7 +220,10 @@ export default function Teams() {
             keyExtractor={(h) => String(h?.id ?? h?.name)}
             contentContainerStyle={{paddingBottom: 24, gap: 12}}
             renderItem={({item, index}) => (
-              <Pressable onLongPress={() => onRemoveMember(index)}>
+              <Pressable
+      onPress={() => nav.navigate('HeroDetail', { hero: item })}
+      onLongPress={() => onRemoveMember(index)}
+    >
                 <HeroCard hero={item} fav={false} onToggle={() => {}} />
               </Pressable>
             )}
@@ -249,6 +259,7 @@ export default function Teams() {
               renderItem={({item}) => (
                 <MiniHeroCard
                   hero={item}
+                  onPress={() => nav.navigate('HeroDetail', { hero: item })}
                   onAdd={() => {
                     addHero(item);
                     setShowPicker(false);
@@ -386,7 +397,7 @@ const s = StyleSheet.create({
   label: {color: colors.text, fontFamily: fonts.medium, marginBottom: 6},
   input: {
     backgroundColor: colors.text, borderRadius: 12, borderWidth: 1, borderColor: colors.searchSubInputBg,
-    color: colors.text, paddingHorizontal: 12, paddingVertical: 10, fontFamily: fonts.regular,
+    color: '#000', paddingHorizontal: 12, paddingVertical: 10, fontFamily: fonts.regular,
   },
   primaryBtn: {
     marginTop: 12, backgroundColor: colors.heartplaceholder, borderRadius: 12,
