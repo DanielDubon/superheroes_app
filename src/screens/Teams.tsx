@@ -24,6 +24,7 @@ import MiniHeroCard from '../components/MiniHeroCard';
 import SearchIcon from '../../assets/search/search.svg';
 
 
+
 type Hero = any;
 
 
@@ -238,7 +239,7 @@ export default function Teams() {
           transparent={false}
         >
           <SafeAreaView style={s.pickerPage}>
-            <Text style={s.pickerTitle}>Add member</Text>
+            <H1>Add member</H1>
 
             <View style={s.searchBox}>
              <SearchIcon width={24} height={24} />
@@ -255,7 +256,7 @@ export default function Teams() {
             <FlatList
               data={candidates}
               keyExtractor={(h) => String(h?.id ?? h?.name)}
-              contentContainerStyle={{paddingHorizontal: 16, paddingBottom: 20, rowGap: 12}}
+              contentContainerStyle={{paddingHorizontal: 4, paddingBottom: 20, rowGap: 12}}
               renderItem={({item}) => (
                 <MiniHeroCard
                   hero={item}
@@ -351,20 +352,29 @@ export default function Teams() {
 }
 
 const s = StyleSheet.create({
-  root: {flex: 1, backgroundColor: colors.bg, paddingHorizontal: 16, paddingTop: 8},
+  root: {flex: 1, backgroundColor: colors.bg, paddingHorizontal: 16},
 
-  // Header lista
-  header: {flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'},
+
+ header: {
+   flexDirection: 'row',
+  alignItems: 'center',
+   justifyContent: 'space-between',
+   paddingTop: 7,
+   paddingBottom: 8,        
+ },
   headerFab: {
-    width: 50, height: 50, borderRadius: 100, backgroundColor: colors.heartplaceholder,
-    alignItems: 'center', justifyContent: 'center', marginTop: 16,
-  },
+
+    width: 40, height: 40, borderRadius: 100,
+    backgroundColor: colors.heartplaceholder,
+    alignItems: 'center', justifyContent: 'center',
+    
+   },
   plus: {color: '#fff', fontSize: 22, fontFamily: fonts.semiBold, marginTop: 3},
 
   // Tarjetas teams
   teamCard: {
     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    backgroundColor: colors.Herocard, padding: 14, borderRadius: 16, marginTop: 30
+    backgroundColor: colors.Herocard, padding: 14, borderRadius: 16, marginTop: 15
   },
   teamName: {color: colors.text, fontFamily: fonts.semiBold, fontSize: 16},
   teamMeta: {color: colors.subtext, marginTop: 2, fontFamily: fonts.regular, fontSize: 12},
@@ -407,10 +417,10 @@ const s = StyleSheet.create({
 
   // Picker
   pickerPage: {flex: 1, backgroundColor: colors.subbg, paddingHorizontal: 16, paddingTop: 8},
-  pickerTitle: {color: colors.text, fontFamily: fonts.semiBold, fontSize: 22, marginBottom: 12, marginTop: 8},
+  pickerTitle: {color: colors.text, fontFamily: fonts.semiBold, fontSize: 26, marginBottom: 12, marginTop: 8},
   searchBox: {
     flexDirection: 'row', alignItems: 'center',
-    backgroundColor: colors.searchSubInputBg, borderRadius: 12, paddingHorizontal: 10, marginBottom: 12,
+    backgroundColor: colors.searchSubInputBg, borderRadius: 100, paddingHorizontal: 10, marginBottom: 16, marginTop: 16 ,
     borderWidth: 1, borderColor: colors.searchSubInputBg,
   },
   searchIcon: {color: colors.subtext, marginRight: 6, fontSize: 14},

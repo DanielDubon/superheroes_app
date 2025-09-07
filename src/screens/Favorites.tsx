@@ -1,5 +1,8 @@
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RootStackParamList } from '../navigation/RootNavigator';
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
-import { View, FlatList, Text, StyleSheet, RefreshControl, SafeAreaView } from 'react-native';
+import { View, FlatList, Text, StyleSheet, RefreshControl, SafeAreaView, Pressable } from 'react-native';
 import { getAllHeroes } from '../api/superhero';
 import type { Hero } from '../types/superhero';
 import { colors } from '../theme/colors';
@@ -9,6 +12,7 @@ import HeroCard from '../components/HeroCard';
 import { H1 } from '../ui/Typography';
 
 export default function Favorites() {
+  const nav = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { favs, toggle } = useFavs();
   const [all, setAll] = useState<Hero[]>([]);
   const [q, setQ] = useState('');
@@ -65,8 +69,10 @@ export default function Favorites() {
           keyExtractor={(it) => String(it.id)}
           contentContainerStyle={{ paddingBottom: 24, gap: 12 , paddingTop: 25}}
           renderItem={({ item }) => (
-            <HeroCard hero={item} fav={true} onToggle={toggle} />
-          )}
+          <Pressable onPress={() => nav.navigate('HeroDetail', { hero: item })}>
+          <HeroCard hero={item} fav={true} onToggle={toggle} />
+          </Pressable>
+        )}
           refreshControl={
             <RefreshControl
               refreshing={loading}
