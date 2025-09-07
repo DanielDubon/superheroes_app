@@ -44,5 +44,14 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "codegenConfig": {
+  "name": "NativeBiometricAuthSpec",
+  "type": "modules",
+  "jsSrcsDir": "specs",
+  "android": {
+    "javaPackageName": "com.startrackheroes.biometric"
   }
+}
+
 }
