@@ -7,6 +7,7 @@ import SearchBar from "../components/SearchBar";
 import HeroCard from "../components/HeroCard";
 import { fonts } from '../theme/typography';
 import { loadFavs, saveFavs } from '../storage/favs';
+import { H1 } from '../ui/Typography';
 
 export default function Home() {
   const [count, setCount] = useState<number | null>(null);
@@ -72,7 +73,7 @@ export default function Home() {
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.header}>
-        <Text style={styles.h1}>Superheroes</Text>
+        <H1>Superheroes</H1>
       </View>
 
       <View style={{ marginTop: 8, marginBottom: 12 }}>
@@ -110,7 +111,7 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.bg, paddingHorizontal: 16, paddingTop: 8 },
-  header: { paddingVertical: 8 },
+  root: { flex: 1, backgroundColor: colors.bg, paddingHorizontal: 16},
+  header: { paddingTop: 8,paddingVertical: 8 },
   h1: { color: colors.text, fontSize: 28, fontFamily: fonts.semiBold },
 });
