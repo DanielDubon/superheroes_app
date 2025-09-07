@@ -3,7 +3,7 @@ export const colors = {
   text: "#FFFFFF",
   subtext: "#847f9e",
   SearchinputBg: "#292044",
-  border:  "#11072f",
+  border:  "#6a4dbc",
   Herocard: "#291f55",
   heartplaceholder: "#6a4dbc"
 };

@@ -1,17 +1,19 @@
 import React from "react";
 import { StatusBar, useColorScheme } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import Home from "./src/screens/Home";
+import Tabs from './src/navigation/Tabs';
 
-function App() {
-  const isDark = useColorScheme() === "dark";
+export default function App() {
+  const isDark = useColorScheme() === 'dark';
+
   return (
-    
     <SafeAreaProvider>
-      <StatusBar barStyle="light-content" />
-      <Home />
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle={isDark ? 'light-content' : 'dark-content'}
+      />
+      <Tabs />
     </SafeAreaProvider>
   );
 }
-
-export default App;
