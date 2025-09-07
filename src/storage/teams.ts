@@ -17,15 +17,16 @@ function saveTeams(list: Team[]) {
 }
 
 export function createTeam(name: string): Team {
-  const clean = name.trim();
   const team: Team = {
-    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    name: clean,
+    id: String(Date.now()),
+    name: name.trim(),
     members: [],
-    createdAt: Date.now(),
+    createdAt: Date.now(),          
   };
-  const next = [team, ...getTeams()];
-  saveTeams(next);
+
+  const all = getTeams();
+  const updated = [team, ...all];
+  saveTeams(updated);          
   return team;
 }
 
@@ -36,4 +37,44 @@ export function removeTeam(id: string) {
 
 export function upsertTeams(list: Team[]) {
   saveTeams(list);
+}
+
+export function clearTeams() {
+  saveTeams([]);
+}
+
+
+export function addMember(teamId: string, memberName: string): Team | null {
+  const list = getTeams();
+  const idx: number = list.findIndex(t => t.id === teamId);
+  if (idx < 0) return null;
+
+  const name = memberName.trim();
+  if (!name) return null;
+
+  const updatedTeam: Team = {
+    ...list[idx],
+    members: [...(list[idx].members ?? []), name],
+  };
+
+  const next = [...list];
+  next[idx] = updatedTeam;
+  saveTeams(next);
+  return updatedTeam;
+}
+
+export function removeMember(teamId: string, memberIndex: number): Team | null {
+  const list = getTeams();
+  const idx: number = list.findIndex(t => t.id === teamId);
+  if (idx < 0) return null;
+
+  const updatedTeam: Team = {
+    ...list[idx],
+    members: (list[idx].members ?? []).filter((_, i) => i !== memberIndex),
+  };
+
+  const next = [...list];
+  next[idx] = updatedTeam;
+  saveTeams(next);
+  return updatedTeam;
 }

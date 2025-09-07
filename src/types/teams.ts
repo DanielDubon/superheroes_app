@@ -1,6 +1,6 @@
 export type Team = {
   id: string;       
   name: string;
-  members: number[]; 
+  members: string[]; 
   createdAt: number;
 };
