@@ -6,6 +6,8 @@ App movil en React Native
 ![App demo](docs/demos.gif)
 ---
 
+## Video
+
 [Ver demo en video](docs/videodemo.mp4)
 
 ---
