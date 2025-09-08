@@ -6,6 +6,12 @@ App movil en React Native
 ![App demo](docs/demo.gif)
 ---
 
+Video con flujo general
+
+<video src="docs/videodemo.mp4" controls width="360"></video>
+
+---
+
 
 # Como ejecutarlo (Android, npm)
 
