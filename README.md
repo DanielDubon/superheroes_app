@@ -3,12 +3,12 @@
 App movil en React Native
 
 
-![App demo](docs/demo.gif)
+![App demo](docs/demos.gif)
 ---
 
-Video con flujo general
+## Video
 
-<video src="docs/videodemo.mp4" controls width="360"></video>
+[Ver demo en video](docs/videodemo.mp4)
 
 ---
 
